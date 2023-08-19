@@ -7,5 +7,7 @@ class LeaveApplicationTest extends Specification {
     }
 
     def "Main"() {
+        expect:
+        true
     }
 }
