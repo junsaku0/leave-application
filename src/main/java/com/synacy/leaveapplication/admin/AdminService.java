@@ -21,4 +21,8 @@ public class AdminService {
     private void initializeAdmin() {
         adminRepository.saveAll(this.admin);
     }
+
+    public List<Admin> getAdminList() {
+        return adminRepository.findAll();
+    }
 }
