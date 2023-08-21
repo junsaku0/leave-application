@@ -15,9 +15,6 @@ public class EmployeeUserResponse {
     @Getter
     private UserRole role;
 
-
-
-
     public EmployeeUserResponse(Employee employee) {
         this.id = employee.getId();
         this.name = employee.getName();
