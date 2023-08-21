@@ -1,4 +1,8 @@
 package com.synacy.leaveapplication.employee
 
-class EmployeeServiceTest extends GroovyTestCase {
+import spock.lang.Specification
+
+class EmployeeServiceTest extends Specification{
+
+
 }

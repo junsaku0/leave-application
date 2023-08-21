@@ -5,6 +5,8 @@ import com.synacy.leaveapplication.Manager.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployeeService {
 
@@ -21,6 +23,10 @@ public class EmployeeService {
         Manager manager = managerService.getManagerById(employeeDetails.getManagerId());
         Employee employee = new Employee (employeeDetails.getName(),employeeDetails.getHireDate(),employeeDetails.getTotalLeave(),manager);
         return employeeRepository.save(employee);
+
+    }
+    public List<Employee> findAllEmployees (){
+        return employeeRepository.findAll();
 
     }
 }
