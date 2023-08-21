@@ -27,12 +27,11 @@ public class ManagerModel {
     @Setter
     private int  currentLeave;
 
-    public ManagerModel(Long id, String name, Date hireDate, int totalLeave, int currentLeave) {
-        this.id = id;
+    public ManagerModel(String name, Date hireDate, int totalLeave) {
         this.name = name;
         this.hireDate = hireDate;
         this.totalLeave = totalLeave;
-        this.currentLeave = currentLeave;
+        this.currentLeave = totalLeave;
     }
     public ManagerModel() {
 
