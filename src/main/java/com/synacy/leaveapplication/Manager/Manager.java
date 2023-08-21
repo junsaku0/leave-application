@@ -1,5 +1,6 @@
 package com.synacy.leaveapplication.Manager;
 
+import com.synacy.leaveapplication.employee.Employee;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,10 +12,8 @@ import java.util.Date;
 public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
-    @Setter
     @Getter
-    private Long id;
+    Long id;
     @Getter
     @Setter
     private String name;
