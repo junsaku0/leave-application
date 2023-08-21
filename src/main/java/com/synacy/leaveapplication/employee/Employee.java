@@ -29,19 +29,19 @@ public class Employee {
 
     @Getter
     @Setter
-    @ManyToOne(targetEntity = Manager.class, cascade = {CascadeType.ALL})
+   @OneToOne
     @JoinColumn (name = "manager_Id")
-    private Long managerId;
+    public Manager manager;
 
     @Getter
     @Setter
     int currentLeave;
 
-    public Employee(String name, Date hireDate, int totalLeaves, Long managerId) {
+    public Employee(String name, Date hireDate, int totalLeaves, Manager manager) {
      this.name = name;
      this.hireDate = hireDate;
      this.totalLeaves = totalLeaves;
-     this.managerId = managerId;
+     this.manager= manager;
      this.currentLeave = totalLeaves;
 
     }

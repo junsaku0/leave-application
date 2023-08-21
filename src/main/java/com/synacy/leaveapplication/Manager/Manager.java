@@ -12,12 +12,8 @@ import java.util.Date;
 public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
-    @Setter
     @Getter
-    @OneToMany(targetEntity = Employee.class,mappedBy= "employee",cascade = {CascadeType.ALL})
-
-    private Long id;
+    Long id;
     @Getter
     @Setter
     private String name;
