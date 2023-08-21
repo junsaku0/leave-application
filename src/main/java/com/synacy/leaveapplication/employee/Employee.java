@@ -1,44 +1,51 @@
 package com.synacy.leaveapplication.employee;
 
+import com.synacy.leaveapplication.Manager.Manager;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
 
 @Entity
-@Setter
-@Getter
 public class Employee {
+
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column (nullable = false)
 
-    @Column (nullable = false)
-    String name;
-    @Column (nullable = false)
-    Date hireDate;
-    @Column (nullable = false)
-    int totalNumberOfLeaves;
-    @Column (nullable = false)
-    int managerId;
-    @Column (nullable = false)
-    int currentNumberOfLeaves;
+    @Getter
+    @Setter
+   private String name;
 
-    public Employee(String name, Date hireDate, int totalNumberOfLeaves, int managerId, int currentNumberOfLeaves) {
+    @Getter
+    @Setter
+   private Date hireDate;
+    @Getter
+    @Setter
+    private int totalLeaves;
+
+    @Getter
+    @Setter
+    @ManyToOne(targetEntity = Manager.class, cascade = {CascadeType.ALL})
+    @JoinColumn (name = "manager_Id")
+    private Long managerId;
+
+    @Getter
+    @Setter
+    int currentLeave;
+
+    public Employee(String name, Date hireDate, int totalLeaves, Long managerId) {
      this.name = name;
      this.hireDate = hireDate;
-     this.totalNumberOfLeaves = totalNumberOfLeaves;
+     this.totalLeaves = totalLeaves;
      this.managerId = managerId;
-     this.currentNumberOfLeaves = currentNumberOfLeaves;
+     this.currentLeave = totalLeaves;
 
     }
+    public Employee () {
 
-
-
-
-
-
-
+    }
 }
