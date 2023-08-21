@@ -1,10 +1,12 @@
 package com.synacy.leaveapplication.Manager;
+import com.synacy.leaveapplication.admin.Admin;
+import com.synacy.leaveapplication.admin.AdminUserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -16,36 +18,43 @@ public class ManagerController {
         this.managerService = managerService;
     }
 
-    @GetMapping("/api/v1/manager/all")
-    public ResponseEntity<List<ManagerModel>> getAllManagers(){
-        List <ManagerModel> employees = managerService.findAllManagers();
+    @GetMapping("/api/v1/manager")
+    public ResponseEntity<List<Manager>> getAllManagers(){
+        List <Manager> employees = managerService.findAllManagers();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
-    @PostMapping("/api/v1/manager/add")
-    public ResponseEntity<ManagerModel> addManager(@RequestBody ManagerModel managerModel){
-        String name = managerModel.getName();
-        Date hireDate = managerModel.getHireDate();
-        int totalLeave = managerModel.getTotalLeave();
-        int currentLeave = managerModel.getCurrentLeave();
-        ManagerModel newManager = managerService.createManager(name, hireDate, totalLeave, currentLeave);
+    @PostMapping("/api/v1/manager")
+    public ResponseEntity<Manager> addManager(@RequestBody ManagerDetails managerDetails){
+        Manager newManager = managerService.createManager(managerDetails);
         return new ResponseEntity<>(newManager, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/v1/manager/update/{id}")
-    public ResponseEntity<ManagerModel> updateManager(@PathVariable Long id, @RequestBody ManagerModel managerModel) {
-        String name = managerModel.getName();
-        int totalLeave = managerModel.getTotalLeave();
-        int currentLeave = managerModel.getCurrentLeave();
+    @PutMapping("/api/v1/manager/{id}")
+    public ResponseEntity<Manager> updateManager(@PathVariable Long id, @RequestBody Manager manager) {
+        String name = manager.getName();
+        int totalLeave = manager.getTotalLeave();
+        int currentLeave = manager.getCurrentLeave();
 
-        ManagerModel updatedManager = managerService.updateManager(id, name, totalLeave, currentLeave);
+        Manager updatedManager = managerService.updateManager(id, name, totalLeave, currentLeave);
         return new ResponseEntity<>(updatedManager, HttpStatus.OK);
     }
 
-    @GetMapping("/api/v1/find/manager/{id}")
-    public ResponseEntity <ManagerModel> filterManagerById (@PathVariable ("id")Long id){
-        ManagerModel manager = managerService.findManagerByiD(id);
+    @GetMapping("/api/v1/manager/{id}")
+    public ResponseEntity <Manager> filterManagerById (@PathVariable ("id")Long id){
+        Manager manager = managerService.getManagerById(id);
         return new ResponseEntity<>(manager, HttpStatus.OK);
+    }
+
+    @GetMapping("api/v1/user/manager")
+    public ResponseEntity<List<ManagerUserResponse>> fetchManagerUserList() {
+        List<Manager> managerList = managerService.findAllManagers();
+
+        List<ManagerUserResponse> managerResponseList =
+                managerList.stream().map(ManagerUserResponse::new)
+                        .collect(Collectors.toList());
+
+        return new ResponseEntity<>(managerResponseList, HttpStatus.OK);
     }
 
 

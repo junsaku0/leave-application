@@ -8,11 +8,12 @@ import java.util.Date;
 
 
 @Entity
-public class ManagerModel {
+public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
     @Setter
+    @Getter
     private Long id;
     @Getter
     @Setter
@@ -27,13 +28,13 @@ public class ManagerModel {
     @Setter
     private int  currentLeave;
 
-    public ManagerModel(String name, Date hireDate, int totalLeave) {
+    public Manager(String name, Date hireDate, int totalLeave) {
         this.name = name;
         this.hireDate = hireDate;
         this.totalLeave = totalLeave;
         this.currentLeave = totalLeave;
     }
-    public ManagerModel() {
+    public Manager() {
 
     }
 }
