@@ -12,17 +12,17 @@ public class EmployeeDetails {
 
     private Date hireDate;
 
-    @Getter
     private int totalLeave;
 
     @Getter
     private String managerName;
+    private String manager;
 
-    @Getter
     private int currentLeave;
 
     public EmployeeDetails(String name,int totalLeave,String managerName){
         this.name = name;
+        this.hireDate = hireDate;
         this.totalLeave = totalLeave;
         this.managerName= managerName;
 
