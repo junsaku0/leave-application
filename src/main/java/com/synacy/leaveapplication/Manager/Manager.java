@@ -13,16 +13,21 @@ public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
+    @Setter
     Long id;
+
     @Getter
     @Setter
     private String name;
+
     @Getter
     @Setter
     private Date hireDate;
+
     @Getter
     @Setter
     private int totalLeave;
+
     @Getter
     @Setter
     private int  currentLeave;

@@ -15,7 +15,7 @@ public class AdminService {
     public AdminService(List<Admin> admin, AdminRepository adminRepository) {
         this.admin = admin;
         this.adminRepository = adminRepository;
-        initializeAdmin();
+//        initializeAdmin();
     }
 
     private void initializeAdmin() {

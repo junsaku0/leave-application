@@ -36,6 +36,15 @@ public class ManagerService {
         }
     }
 
+    public Manager getManagerByName(String name) {
+        Optional<Manager> optionalManager = managerRepository.findManagerByName(name);
+        if (optionalManager.isPresent()) {
+            return optionalManager.get();
+        } else {
+            throw new IllegalArgumentException("Manager not found with name: " + name);
+        }
+    }
+
     public Manager updateManager(Long id, String name, int totalLeave, int currentLeave) {
         Optional<Manager> optionalManager = managerRepository.findById(id);
         if (optionalManager.isPresent()) {

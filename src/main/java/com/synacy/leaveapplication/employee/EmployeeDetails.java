@@ -12,19 +12,17 @@ public class EmployeeDetails {
 
     private Date hireDate;
 
-    @Getter
     private int totalLeave;
 
-    @Getter
-    private Long managerId;
+    private String manager;
 
-    @Getter
     private int currentLeave;
 
-    public EmployeeDetails(String name,int totalLeave,Long managerId) {
+    public EmployeeDetails(String name, Date hireDate, int totalLeave, String manager) {
         this.name = name;
+        this.hireDate = hireDate;
         this.totalLeave = totalLeave;
-        this.managerId = managerId;
+        this.manager = manager;
 
     }
 }
