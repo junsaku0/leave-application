@@ -16,15 +16,15 @@ public class EmployeeDetails {
     private int totalLeave;
 
     @Getter
-    private Long managerId;
+    private String managerName;
 
     @Getter
     private int currentLeave;
 
-    public EmployeeDetails(String name,int totalLeave,Long managerId) {
+    public EmployeeDetails(String name,int totalLeave,String managerName){
         this.name = name;
         this.totalLeave = totalLeave;
-        this.managerId = managerId;
+        this.managerName= managerName;
 
     }
 }

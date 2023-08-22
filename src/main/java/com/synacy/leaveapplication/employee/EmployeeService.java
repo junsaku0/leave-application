@@ -20,13 +20,12 @@ public class EmployeeService {
         this.managerService = managerService;
     }
     public Employee createEmployee(EmployeeDetails employeeDetails) {
-        Manager manager = managerService.getManagerById(employeeDetails.getManagerId());
+        Manager manager = managerService.getManagerByName(employeeDetails.getManagerName());
         Employee employee = new Employee (employeeDetails.getName(),employeeDetails.getHireDate(),employeeDetails.getTotalLeave(),manager);
         return employeeRepository.save(employee);
 
     }
     public List<Employee> findAllEmployees (){
         return employeeRepository.findAll();
-
     }
 }
