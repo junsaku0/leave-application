@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 
-class AdminControllerTest extends Specification {
+class AdminControllerSpec extends Specification {
 
     private AdminService adminService
     public AdminController adminController
