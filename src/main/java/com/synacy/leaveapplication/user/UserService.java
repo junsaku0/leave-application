@@ -16,13 +16,13 @@ public class UserService {
     public UserService(List<Users> usersList, UserRepository userRepository) {
         this.usersList = usersList;
         this.userRepository = userRepository;
-        this.initializeUser();
+//        this.initializeUser();
     }
 
     public Users createUser(UserDetails userDetails) {
         Users users = new Users(userDetails.getName(), userDetails.getRole(),
-                userDetails.getHeadId(), userDetails.getHireDate(),
-                userDetails.getTotalLeave());
+                    userRepository.findAllByName(userDetails.getHead()).get().getId(),
+                userDetails.getHireDate(), userDetails.getTotalLeave());
         return userRepository.save(users);
     }
 
