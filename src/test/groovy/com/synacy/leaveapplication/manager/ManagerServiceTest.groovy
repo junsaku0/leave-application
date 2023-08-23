@@ -1,4 +1,4 @@
-package com.synacy.leaveapplication.Manager
+package com.synacy.leaveapplication.manager
 
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification

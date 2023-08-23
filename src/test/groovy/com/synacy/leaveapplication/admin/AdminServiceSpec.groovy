@@ -2,7 +2,7 @@ package com.synacy.leaveapplication.admin
 
 import spock.lang.Specification
 
-class AdminServiceTest extends Specification {
+class AdminServiceSpec extends Specification {
 
     public List<Admin> adminList;
     private AdminRepository adminRepository;
