@@ -40,4 +40,31 @@ public class LeaveController {
                 page, leaveResponses);
     }
 
+    @GetMapping("api/v1/leave/head/{id}")
+    public PageResponse<LeaveResponse> getLeaveByHead(
+            @PathVariable Long id,
+            @RequestParam(value = "max", defaultValue = "10") int max,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        Page<Leave> leaves = leaveService.fetchLeaveByHeadId(id, max, page);
+
+        List<LeaveResponse> leaveResponses =
+                leaves.getContent().stream().map(LeaveResponse::new).toList();
+
+        return new PageResponse<>(leaves.getNumberOfElements(),
+                page, leaveResponses);
+    }
+
+    @GetMapping("api/v1/leave/head")
+    public PageResponse<LeaveResponse> getAllLeave(
+            @RequestParam(value = "max", defaultValue = "10") int max,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        Page<Leave> leaves = leaveService.fetchAllLeave(max, page);
+
+        List<LeaveResponse> leaveResponses =
+                leaves.getContent().stream().map(LeaveResponse::new).toList();
+
+        return new PageResponse<>(leaves.getNumberOfElements(),
+                page, leaveResponses);
+    }
+
 }
