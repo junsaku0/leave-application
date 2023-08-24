@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 public class Leave {
@@ -63,7 +64,7 @@ public class Leave {
         this.fileDate = LocalDate.now();
         this.startDate = startDate;
         this.endDate = endDate;
-        this.duration = 0L;
+        this.duration = ChronoUnit.DAYS.between(startDate, endDate);
         this.status = LeaveStatus.PENDING;
         this.reason = reason;
     }
