@@ -20,6 +20,11 @@ public class Leave {
     @Getter
     @Setter
     @Column(nullable = false)
+    Long userId;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
     String name;
 
     @Getter
@@ -57,8 +62,9 @@ public class Leave {
     @Column(nullable = false)
     String reason;
 
-    public Leave(String name, UserRole role, LocalDate startDate,
+    public Leave(Long userId, String name, UserRole role, LocalDate startDate,
                  LocalDate endDate, String reason) {
+        this.userId = userId;
         this.name = name;
         this.role = role;
         this.fileDate = LocalDate.now();

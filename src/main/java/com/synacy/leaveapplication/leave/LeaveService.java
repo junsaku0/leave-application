@@ -27,7 +27,7 @@ public class LeaveService {
     }
 
     public Leave createLeave(LeaveDetails leaveDetails) {
-        Leave leave = new Leave(leaveDetails.getName(), leaveDetails.getRole(),
+        Leave leave = new Leave(leaveDetails.getUserId(), leaveDetails.getName(), leaveDetails.getRole(),
                 leaveDetails.getStartDate(), leaveDetails.getEndDate(),
                 leaveDetails.getReason());
         return this.leaveRepository.save(leave);
