@@ -21,8 +21,8 @@ public class UserService {
 
     public Users createUser(UserDetails userDetails) {
         Users users = new Users(userDetails.getName(), userDetails.getRole(),
-                userDetails.getHeadId(), userDetails.getHireDate(),
-                userDetails.getTotalLeave());
+                    userRepository.findAllByName(userDetails.getHead()).get().getId(),
+                userDetails.getHireDate(), userDetails.getTotalLeave());
         return userRepository.save(users);
     }
 
