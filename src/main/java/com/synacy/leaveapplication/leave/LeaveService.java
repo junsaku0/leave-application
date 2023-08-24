@@ -42,6 +42,18 @@ public class LeaveService {
         return leaveRepository.findAllByNameAndRole(users.getName(), users.getRole(), pageable);
     }
 
+    public Page<Leave> fetchLeaveByHeadId(Long headId, int max, int page) {
+        int offset = page - 1;
+        Pageable pageable = PageRequest.of(offset, max);
 
+        return leaveRepository.findLeaveByHeadId(headId, pageable);
+    }
+
+    public Page<Leave> fetchAllLeave(int max, int page) {
+        int offset = page - 1;
+        Pageable pageable = PageRequest.of(offset, max);
+
+        return leaveRepository.findAll(pageable);
+    }
 
 }
