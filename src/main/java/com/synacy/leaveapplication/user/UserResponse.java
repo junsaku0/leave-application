@@ -5,6 +5,7 @@ import lombok.Getter;
 
 public class UserResponse {
 
+    @Getter
     private Long id;
 
     @Getter
