@@ -1,10 +1,10 @@
-package com.synacy.leaveapplication.admin;
+package com.synacy.leaveapplication.leave;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AdminRepository extends JpaRepository<Admin, Long> {
+public interface LeaveRepository extends JpaRepository<Leave,Long> {
 
 
 }
