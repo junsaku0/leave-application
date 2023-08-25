@@ -38,6 +38,10 @@ public class UserService {
         return userRepository.findAllByRole(UserRole.ADMIN);
     }
 
+    public List<Users> findAllUsers() {
+        return userRepository.findAll();
+    }
+
     private void initializeUser() {
         userRepository.saveAll(this.usersList);
     }

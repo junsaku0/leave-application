@@ -57,4 +57,15 @@ public class UserController {
 
         return new ResponseEntity<>(adminResponseList, HttpStatus.OK);
     }
+
+    @GetMapping("api/v1/user")
+    public ResponseEntity<List<UserResponse>> fetchUserList() {
+        List<Users> userList = userService.findAllUsers();
+
+        List<UserResponse> userResponseList =
+                userList.stream().map(UserResponse::new)
+                        .collect(Collectors.toList());
+
+        return new ResponseEntity<>(userResponseList, HttpStatus.OK);
+    }
 }
