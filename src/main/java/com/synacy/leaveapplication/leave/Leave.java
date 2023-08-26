@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 public class Leave {
@@ -15,6 +16,11 @@ public class Leave {
     @SequenceGenerator(name = "leave_sequence", sequenceName = "leave_sequence", allocationSize = 1)
     @Getter
     Long id;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    Long userId;
 
     @Getter
     @Setter
@@ -56,14 +62,15 @@ public class Leave {
     @Column(nullable = false)
     String reason;
 
-    public Leave(String name, UserRole role, LocalDate startDate,
+    public Leave(Long userId, String name, UserRole role, LocalDate startDate,
                  LocalDate endDate, String reason) {
+        this.userId = userId;
         this.name = name;
         this.role = role;
         this.fileDate = LocalDate.now();
         this.startDate = startDate;
         this.endDate = endDate;
-        this.duration = 0L;
+        this.duration = ChronoUnit.DAYS.between(startDate, endDate);
         this.status = LeaveStatus.PENDING;
         this.reason = reason;
     }

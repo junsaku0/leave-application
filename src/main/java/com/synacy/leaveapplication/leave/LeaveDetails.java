@@ -8,6 +8,9 @@ import java.time.LocalDate;
 public class LeaveDetails {
 
     @Getter
+    Long userId;
+
+    @Getter
     String name;
 
     @Getter
@@ -22,8 +25,9 @@ public class LeaveDetails {
     @Getter
     String reason;
 
-    public LeaveDetails(String name, UserRole role, LocalDate startDate,
+    public LeaveDetails(Long userId, String name, UserRole role, LocalDate startDate,
                         LocalDate endDate, String reason) {
+        this.userId = userId;
         this.name = name;
         this.role = role;
         this.startDate = startDate;
