@@ -14,6 +14,7 @@ import java.util.List;
 public interface LeaveRepository extends JpaRepository<Leave,Long> {
 
 
+
     Page<Leave> findAllByNameAndRole(String name, UserRole role, Pageable pageable);
 
     @Query("SELECT leave FROM Leave as leave WHERE leave.userId IN " +
