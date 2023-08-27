@@ -3,10 +3,7 @@ package com.synacy.leaveapplication.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +11,7 @@ import java.util.stream.Collectors;
 @RestController
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -22,9 +19,13 @@ public class UserController {
     }
 
     @PostMapping("/api/v1/user")
-    public ResponseEntity<Users> addUser(@RequestBody UserDetails userDetails) {
-        Users users = userService.createUser(userDetails);
-        return new ResponseEntity<>(users, HttpStatus.CREATED);
+    public ResponseEntity<?> addUser(@RequestBody UserDetails userDetails) {
+       try {
+           Users users = userService.createUser(userDetails);
+           return new ResponseEntity<>(users, HttpStatus.CREATED);
+       } catch (Exception e) {
+           return new ResponseEntity<>("Error creating user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+       }
     }
 
     @GetMapping("api/v1/user/manager")
@@ -56,5 +57,10 @@ public class UserController {
                         .collect(Collectors.toList());
 
         return new ResponseEntity<>(adminResponseList, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(Exception.class)
+        public ResponseEntity<String> handleException(Exception exception){
+        return new ResponseEntity<>("An error occurred: " + exception.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
