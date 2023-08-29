@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -50,7 +51,7 @@ public class Leave {
     @Getter
     @Setter
     @Column(nullable = false)
-    Long duration;
+    Integer duration;
 
     @Getter
     @Setter
@@ -70,12 +71,26 @@ public class Leave {
         this.fileDate = LocalDate.now();
         this.startDate = startDate;
         this.endDate = endDate;
-        this.duration = ChronoUnit.DAYS.between(startDate, endDate);
+        this.duration = calculateDuration(startDate, endDate);
         this.status = LeaveStatus.PENDING;
         this.reason = reason;
     }
 
     public Leave() {
 
+    }
+
+    private Integer calculateDuration(LocalDate startDate, LocalDate endDate){
+        int duration = 0;
+        LocalDate fromDate = startDate;
+
+        while (!fromDate.isAfter(endDate)) {
+            if (fromDate.getDayOfWeek() != DayOfWeek.SATURDAY &&
+                    fromDate.getDayOfWeek() != DayOfWeek.SUNDAY) {
+                duration++;
+            }
+            fromDate = fromDate.plusDays(1);
+        }
+        return duration;
     }
 }

@@ -24,6 +24,7 @@ public class LeaveService {
         Leave leave = new Leave(leaveDetails.getUserId(), leaveDetails.getName(), leaveDetails.getRole(),
                 leaveDetails.getStartDate(), leaveDetails.getEndDate(),
                 leaveDetails.getReason());
+        updateEarnedLeave(leave);
         return this.leaveRepository.save(leave);
     }
 
@@ -55,7 +56,18 @@ public class LeaveService {
                 .orElseThrow(() -> new IllegalArgumentException("Leave not found with ID: " + leaveId));
 
         leave.setStatus(status);
+        updateEarnedLeave(leave);
         return leaveRepository.save(leave);
+    }
+
+    private void updateEarnedLeave(Leave leave){
+        Users users = userRepository.findAllById(leave.getUserId()).get();
+        if (leave.getStatus() == LeaveStatus.PENDING) {
+            users.setEarnedLeave(users.getEarnedLeave() + leave.getDuration());
+        } else if (leave.getStatus() == LeaveStatus.REJECTED || leave.getStatus() == LeaveStatus.CANCELLED) {
+            users.setEarnedLeave(users.getEarnedLeave() - leave.getDuration());
+        }
+        userRepository.save(users);
     }
 
 
