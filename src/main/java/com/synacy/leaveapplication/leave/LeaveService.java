@@ -51,4 +51,22 @@ public class LeaveService {
         return leaveRepository.findAll(pageable);
     }
 
+    public Leave updateLeave(Long leaveId, LeaveStatus status) {
+        Leave leave = leaveRepository.findById(leaveId)
+                .orElseThrow(() -> new IllegalArgumentException("Leave not found with ID: " + leaveId));
+
+        leave.setStatus(status);
+        updateEarnedLeave(leave);
+        return leaveRepository.save(leave);
+    }
+
+    private void updateEarnedLeave(Leave leave){
+        Users users = userRepository.findAllById(leave.getUserId()).get();
+        if (leave.getStatus() == LeaveStatus.PENDING) {
+            users.setEarnedLeave(users.getEarnedLeave() + leave.getDuration());
+        } else if (leave.getStatus() == LeaveStatus.REJECTED || leave.getStatus() == LeaveStatus.CANCELLED) {
+            users.setEarnedLeave(users.getEarnedLeave() - leave.getDuration());
+        }
+        userRepository.save(users);
+    }
 }
