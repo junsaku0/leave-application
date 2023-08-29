@@ -67,4 +67,14 @@ public class LeaveController {
                 page, leaveResponses);
     }
 
+    @PutMapping("/api/v1/leave/{id}")
+    public ResponseEntity<Leave> updateLeaveStatus(
+            @PathVariable Long id,
+            @RequestParam("status") LeaveStatus status) {
+        Leave updatedLeave = leaveService.updateLeave(id, status);
+        return new ResponseEntity<>(updatedLeave, HttpStatus.OK);
+    }
+
+
+
 }
