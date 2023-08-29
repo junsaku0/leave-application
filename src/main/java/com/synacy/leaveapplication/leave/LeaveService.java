@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class LeaveService {
 
@@ -50,5 +49,15 @@ public class LeaveService {
 
         return leaveRepository.findAll(pageable);
     }
+
+    public Leave updateLeave(Long leaveId, LeaveStatus status) {
+        Leave leave = leaveRepository.findById(leaveId)
+                .orElseThrow(() -> new IllegalArgumentException("Leave not found with ID: " + leaveId));
+
+        leave.setStatus(status);
+        return leaveRepository.save(leave);
+    }
+
+
 
 }
