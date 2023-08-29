@@ -9,6 +9,9 @@ import java.time.LocalDate;
 public class LeaveResponse {
 
     @Getter
+    Long id;
+
+    @Getter
     String name;
 
     @Getter
@@ -30,6 +33,7 @@ public class LeaveResponse {
     LeaveStatus status;
 
     public LeaveResponse(Leave leave) {
+        this.id = leave.getId();
         this.name = leave.getName();
         this.fileDate = leave.getFileDate();
         this.startDate = leave.getStartDate();
