@@ -11,8 +11,8 @@ class UserControllerSpec extends Specification {
     public UserController userController
 
     void setup() {
-        this.userService = Mock(UserService)
-        this.userController = new UserController(this.userService)
+        userService = Mock(UserService)
+        userController = new UserController(userService)
     }
 
 //    def "fetchAdminUserList should return a response entity with the correct adminUsers"() {

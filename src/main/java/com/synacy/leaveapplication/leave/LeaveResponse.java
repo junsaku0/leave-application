@@ -1,10 +1,15 @@
 package com.synacy.leaveapplication.leave;
 
+import jakarta.persistence.Column;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 public class LeaveResponse {
+
+    @Getter
+    String name;
 
     @Getter
     LocalDate fileDate;
@@ -25,6 +30,7 @@ public class LeaveResponse {
     LeaveStatus status;
 
     public LeaveResponse(Leave leave) {
+        this.name = leave.getName();
         this.fileDate = leave.getFileDate();
         this.startDate = leave.getStartDate();
         this.endDate = leave.getEndDate();
