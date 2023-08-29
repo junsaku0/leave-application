@@ -1,18 +1,13 @@
 package com.synacy.leaveapplication.leave;
 
-import com.synacy.leaveapplication.user.UserDetails;
 import com.synacy.leaveapplication.user.UserRepository;
-import com.synacy.leaveapplication.user.UserResponse;
 import com.synacy.leaveapplication.user.Users;
-import com.synacy.leaveapplication.web.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LeaveService {

@@ -65,4 +65,17 @@ public class UserController {
             return new ResponseEntity<>(userResponseList, HttpStatus.OK);
 
     }
+
+    @GetMapping("api/v1/manager")
+    public ResponseEntity<List<Users>> fetchManagerList() {
+        List<Users> managerList = userService.findAllManagers();
+        return new ResponseEntity<>(managerList, HttpStatus.OK);
+    }
+
+    @GetMapping("api/v1/employee")
+    public ResponseEntity<List<Users>> fetchEmployeeList() {
+        List<Users> employeeList = userService.findAllEmployees();
+        return new ResponseEntity<>(employeeList, HttpStatus.OK);
+    }
 }
+

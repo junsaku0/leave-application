@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class LeaveController {
@@ -29,7 +28,7 @@ public class LeaveController {
     @GetMapping("api/v1/leave/{id}")
     public PageResponse<LeaveResponse> getMyLeave(
             @PathVariable Long id,
-            @RequestParam(value = "max", defaultValue = "10") int max,
+            @RequestParam(value = "max", defaultValue = "20") int max,
             @RequestParam(value = "page", defaultValue = "1") int page) {
         Page<Leave> leaves = leaveService.fetchLeaveByNameAndRole(id, max, page);
 
@@ -43,7 +42,7 @@ public class LeaveController {
     @GetMapping("api/v1/leave/head/{id}")
     public PageResponse<LeaveResponse> getLeaveByHead(
             @PathVariable Long id,
-            @RequestParam(value = "max", defaultValue = "10") int max,
+            @RequestParam(value = "max", defaultValue = "20") int max,
             @RequestParam(value = "page", defaultValue = "1") int page) {
         Page<Leave> leaves = leaveService.fetchLeaveByHeadId(id, max, page);
 
@@ -56,7 +55,7 @@ public class LeaveController {
 
     @GetMapping("api/v1/leave/head")
     public PageResponse<LeaveResponse> getAllLeave(
-            @RequestParam(value = "max", defaultValue = "10") int max,
+            @RequestParam(value = "max", defaultValue = "20") int max,
             @RequestParam(value = "page", defaultValue = "1") int page) {
         Page<Leave> leaves = leaveService.fetchAllLeave(max, page);
 
