@@ -13,11 +13,14 @@ import java.util.List;
 @Repository
 public interface LeaveRepository extends JpaRepository<Leave,Long> {
 
+
+
     Page<Leave> findAllByNameAndRole(String name, UserRole role, Pageable pageable);
 
     @Query("SELECT leave FROM Leave as leave WHERE leave.userId IN " +
             "(SELECT user.id FROM Users as user WHERE user.headId = :headId)")
     Page<Leave> findLeaveByHeadId(@Param("headId") Long headId, Pageable pageable);
+
 
 
 }
