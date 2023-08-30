@@ -7,34 +7,26 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorResponse> handleAllException(Exception ex){
-        ErrorResponse error = new ErrorResponse(
-                "An error occurred:",
-                ex.getMessage(), LocalDate.now());
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ApiErrorResponse handleResourceNotFoundException() {
+        return new ApiErrorResponse("RESOURCE_NOT_FOUND", "The target resource does not exist");
     }
 
-    @Override
-    public String toString() {
-        return "GlobalExceptionHandler{}";
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(InvalidOperationException.class)
+    public ApiErrorResponse handleInvalidOperationException(InvalidOperationException e) {
+        return new ApiErrorResponse(e.getErrorCode(), e.getErrorMessage());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-        ErrorResponse error = new ErrorResponse(
-                "An error occurred:" ,
-                ex.getMessage() ,
-                LocalDate.now()
-        );
-        return new ResponseEntity<>( error, HttpStatus.BAD_REQUEST);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(LackingParameterException.class)
+    public ApiErrorResponse handleLackingParameterException(LackingParameterException e) {
+        return new ApiErrorResponse("LACKING_PARAMETER", e.getMessage());
     }
-
 
 }

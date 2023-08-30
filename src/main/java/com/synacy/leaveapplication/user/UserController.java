@@ -12,32 +12,26 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private UserService userService;
+    private List<Users> userList;
 
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v1/user")
-    public ResponseEntity<Users> addUser(@RequestBody UserDetails userDetails) {
-              Users users = userService.createUser(userDetails);
-              return new ResponseEntity<>(users, HttpStatus.CREATED);
-
-    }
-
-    @GetMapping("api/v1/user/manager")
-    public ResponseEntity<List<UserResponse>> fetchManagerUserList() {
-        List<Users> managerList = userService.findAllManagers();
-        if (managerList.isEmpty()) {
-            throw new IllegalArgumentException("No manager found");
+//    public ResponseEntity<Users> addUser(@RequestBody UserDetails userDetails) {
+//              Users users = userService.createUser(userDetails);
+//              return new ResponseEntity<>(users, HttpStatus.CREATED);
+    public ResponseEntity<?> addUser(@RequestBody UserDetails userDetails) {
+        if (userService.userExists(userDetails.getName())) {
+            return new ResponseEntity<>("Username already exists", HttpStatus.CONFLICT);
         }
-        List<UserResponse> managerResponseList =
-                managerList.stream().map(UserResponse::new)
-                        .collect(Collectors.toList());
-        return new ResponseEntity<>(managerResponseList, HttpStatus.OK);
+        Users users = userService.createUser(userDetails);
+            return new ResponseEntity<> (users, HttpStatus.CREATED);
     }
 
-    @GetMapping("/api/v1/user/employee")
     public ResponseEntity<List<UserResponse>> fetchEmployeeUserList() {
         List<Users> employeeList = userService.findAllEmployees();
         if (employeeList.isEmpty()) {
