@@ -24,12 +24,6 @@ public class UserService {
         this.userRepository = userRepository;
         this.initializeUser();
     }
-//    public Users createUser(UserDetails userDetails) {
-//        Users users = new Users(userDetails.getName(), userDetails.getRole(),
-//                userRepository.findAllByName(userDetails.getHead()).get().getId(),
-//                userDetails.getHireDate(), userDetails.getTotalLeave());
-//        return userRepository.save(users);
-
     public Users createUser(UserDetails userDetails) {
         missingParameterExists(userDetails);
         if (userNameExists(userDetails)) {

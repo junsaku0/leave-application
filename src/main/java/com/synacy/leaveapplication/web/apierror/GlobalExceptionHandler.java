@@ -1,5 +1,6 @@
 package com.synacy.leaveapplication.web.apierror;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDate;
-
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -28,5 +28,10 @@ public class GlobalExceptionHandler {
     public ApiErrorResponse handleLackingParameterException(LackingParameterException e) {
         return new ApiErrorResponse("LACKING_PARAMETER", e.getMessage());
     }
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(LackingParameterException.class)
+//    public ApiErrorResponse userAlreadyExistsException(UserAlreadyExistsException e) {
+//        return new ApiErrorResponse("Username already exists",e.getMessage());
+//    }
 
 }

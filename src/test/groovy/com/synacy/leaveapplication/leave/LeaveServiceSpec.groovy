@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import spock.lang.Specification
 
+import java.time.LocalDate
+
 class LeaveServiceSpec extends Specification {
 
     private LeaveRepository leaveRepository
@@ -89,5 +91,16 @@ class LeaveServiceSpec extends Specification {
 
         then:
         leaves == actualLeaves.getContent()
+    }
+    def "invalidEndDate should return true when endDate is before existing leave"() {
+        given:
+        LocalDate endDate = LocalDate.of(2022, 12, 31)
+        Leave existingLeave = new Leave(endDate: LocalDate.of(2023, 1, 1))
+        List<Leave> existingLeaveList = [existingLeave]
+        leaveRepository.findByEndDate(endDate) >> existingLeaveList
+        when:
+        boolean result = leaveService.invalidEndDate(endDate)
+        then:
+        result
     }
 }

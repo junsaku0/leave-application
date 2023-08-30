@@ -21,12 +21,9 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v1/user")
-//    public ResponseEntity<Users> addUser(@RequestBody UserDetails userDetails) {
-//              Users users = userService.createUser(userDetails);
-//              return new ResponseEntity<>(users, HttpStatus.CREATED);
     public ResponseEntity<?> addUser(@RequestBody UserDetails userDetails) {
         if (userService.userExists(userDetails.getName())) {
-            return new ResponseEntity<>("Username already exists", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
         }
         Users users = userService.createUser(userDetails);
             return new ResponseEntity<> (users, HttpStatus.CREATED);

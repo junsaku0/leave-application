@@ -2,11 +2,16 @@ package com.synacy.leaveapplication.leave;
 
 import com.synacy.leaveapplication.user.UserRepository;
 import com.synacy.leaveapplication.user.Users;
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -68,5 +73,18 @@ public class LeaveService {
             users.setEarnedLeave(users.getEarnedLeave() - leave.getDuration());
         }
         userRepository.save(users);
+    }
+
+    public boolean leaveExist(LocalDate startDate) {
+        Optional<Leave> existingLeave = leaveRepository.findByStartDate(startDate);
+
+        return existingLeave.isPresent();
+    }
+    public boolean invalidEndDate(LocalDate startDate, LocalDate endDate) {
+        return endDate.isBefore(startDate);
+    }
+    public boolean isFromCurrentMonth(LocalDate date) {
+        LocalDate now = LocalDate.now();
+        return now.getMonth() == date.getMonth() && now.getYear() == date.getYear();
     }
 }

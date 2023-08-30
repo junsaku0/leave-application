@@ -1,17 +1,17 @@
 package com.synacy.leaveapplication.web.apierror;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class ApiErrorResponse {
-    public int statusCode;
-    public String message;
+  @Getter
+  public String message;
 
-        public ApiErrorResponse(String message, String errorMessage) {
+
+        public ApiErrorResponse(String message, String s) {
             super();
             this.message = message;
         }

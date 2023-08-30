@@ -1,12 +1,15 @@
 package com.synacy.leaveapplication.leave;
 
+import com.synacy.leaveapplication.user.Users;
 import com.synacy.leaveapplication.web.PageResponse;
+import com.synacy.leaveapplication.web.apierror.LeaveAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -20,10 +23,30 @@ public class LeaveController {
     }
 
     @PostMapping("/api/v1/leave")
-    public ResponseEntity<Leave> addLeave(@RequestBody LeaveDetails leaveDetails){
-        Leave leave = leaveService.createLeave(leaveDetails);
-        return new ResponseEntity<>(leave, HttpStatus.CREATED);
-    }
+//    public ResponseEntity<Leave> addLeave(@RequestBody LeaveDetails leaveDetails){
+//        try {
+//            Leave leave = leaveService.createLeave(leaveDetails);
+//            return new ResponseEntity<>(leave, HttpStatus.CREATED);
+//        } catch (LeaveAlreadyExistsException e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//
+//    }
+    public ResponseEntity<?> addLeave(@RequestBody LeaveDetails leaveDetails) {
+        LocalDate leaveDate = leaveDetails.getStartDate();
+        LocalDate leaveEndDate = leaveDetails.getEndDate();
+        if (leaveService.invalidEndDate(leaveDetails.getStartDate(),leaveDetails.getEndDate()))
+        {
+            return new ResponseEntity<>("Invalid End date", HttpStatus.BAD_REQUEST);
+        }
+        else if(leaveService.leaveExist(leaveDetails.getStartDate())) {
+            return new ResponseEntity<>("Leave already exists on the provided date", HttpStatus.BAD_REQUEST);
+        }
+
+            Leave leave = leaveService.createLeave(leaveDetails);
+            return new ResponseEntity<>(leave, HttpStatus.CREATED);
+        }
+
 
     @GetMapping("api/v1/leave/{id}")
     public PageResponse<LeaveResponse> getMyLeave(
