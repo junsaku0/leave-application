@@ -1,16 +1,18 @@
 package com.synacy.leaveapplication.web.apierror;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDate;
-
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(ExceededLeaveBalanceException.class)
+    public ResponseEntity<String> handleExceededLeaveBalanceException(ExceededLeaveBalanceException ex){
+        return new ResponseEntity<> (ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({ResourceNotFoundException.class})
     public ApiErrorResponse handleResourceNotFoundException() {

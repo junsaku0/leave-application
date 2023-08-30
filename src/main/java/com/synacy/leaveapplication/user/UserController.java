@@ -23,7 +23,7 @@ public class UserController {
     @PostMapping("/api/v1/user")
     public ResponseEntity<?> addUser(@RequestBody UserDetails userDetails) {
         if (userService.userExists(userDetails.getName())) {
-            return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Username already exists!", HttpStatus.BAD_REQUEST);
         }
         Users users = userService.createUser(userDetails);
             return new ResponseEntity<> (users, HttpStatus.CREATED);
@@ -32,7 +32,7 @@ public class UserController {
     public ResponseEntity<List<UserResponse>> fetchEmployeeUserList() {
         List<Users> employeeList = userService.findAllEmployees();
         if (employeeList.isEmpty()) {
-            throw new IllegalArgumentException("No employee found");
+            throw new IllegalArgumentException("No employee found!");
         }
         List<UserResponse> employeeResponseList = employeeList.stream().map(UserResponse::new).collect(Collectors.toList());
         return new ResponseEntity<>(employeeResponseList, HttpStatus.OK);

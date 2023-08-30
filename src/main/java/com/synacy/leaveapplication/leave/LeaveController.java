@@ -31,8 +31,9 @@ public class LeaveController {
             return new ResponseEntity<>("Invalid End date", HttpStatus.BAD_REQUEST);
         }
         else if(leaveService.leaveExist(leaveDetails.getStartDate())) {
-            return new ResponseEntity<>("Leave already exists on the provided date", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Leave already exists on the provided date!", HttpStatus.BAD_REQUEST);
         }
+        leaveService.insufficientLeave(leaveDetails);
             Leave leave = leaveService.createLeave(leaveDetails);
             return new ResponseEntity<>(leave, HttpStatus.CREATED);
         }

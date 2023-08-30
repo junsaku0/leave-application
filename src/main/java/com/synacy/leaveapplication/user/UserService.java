@@ -27,7 +27,7 @@ public class UserService {
     public Users createUser(UserDetails userDetails) {
         missingParameterExists(userDetails);
         if (userNameExists(userDetails)) {
-            throw new UserAlreadyExistsException("User name already exists");
+            throw new UserAlreadyExistsException("User name already exists!");
         } else {
             Users users = new Users(userDetails.getName(), userDetails.getRole(),
                     userRepository.findAllByName(userDetails.getHead()).get().getId(),
@@ -77,7 +77,7 @@ public class UserService {
 
         fieldCheckers.forEach((fieldName, supplier) -> {
             if (supplier.get() == null) {
-                throw new LackingParameterException(fieldName + " cannot be null");
+                throw new LackingParameterException(fieldName + " cannot be null!");
             }
         });
     }

@@ -1,11 +1,8 @@
 package com.synacy.leaveapplication.leave;
 
-import com.synacy.leaveapplication.user.UserDetails;
 import com.synacy.leaveapplication.user.UserRepository;
 import com.synacy.leaveapplication.user.Users;
-import com.synacy.leaveapplication.web.apierror.UserNotFoundException;
-import jakarta.persistence.Id;
-import org.apache.catalina.User;
+import com.synacy.leaveapplication.web.apierror.ExceededLeaveBalanceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -34,6 +30,16 @@ public class LeaveService {
                 leaveDetails.getStartDate(), leaveDetails.getEndDate(),
                 leaveDetails.getReason());
         return this.leaveRepository.save(leave);
+    }
+    public void insufficientLeave(LeaveDetails leaveDetails){
+        Users users = userRepository.findAllById(leaveDetails.getUserId()).get();
+        Leave leave = new Leave(leaveDetails.getUserId(), leaveDetails.getName(), leaveDetails.getRole(),
+                leaveDetails.getStartDate(), leaveDetails.getEndDate(), leaveDetails.getReason());
+        int leaveBalance = getEarnedLeaveBalance(users, leave);
+        if (leaveBalance < 0 ) {
+            throw new ExceededLeaveBalanceException("Total balance leave not enough!");
+        }
+        users.setTotalLeaves(leaveBalance);
     }
 
     public Page<Leave> fetchLeaveByNameAndRole(Long id, int max, int page) {
@@ -92,12 +98,8 @@ public class LeaveService {
         LocalDate now = LocalDate.now();
         return now.getMonth() == date.getMonth() && now.getYear() == date.getYear();
     }
-    public int getEarnedLeaveBalance(UserDetails userDetails, Leave leave) {
-        int leaveBalance;
-        Users users = userRepository.findAllById(leave.getUserId()).get();
-
-        leaveBalance = users.getTotalLeaves() - leave.getDuration();
-
+    public int getEarnedLeaveBalance(Users users, Leave leave) {
+        int leaveBalance = users.getTotalLeaves() - leave.getDuration();
         return leaveBalance;
 
 }
