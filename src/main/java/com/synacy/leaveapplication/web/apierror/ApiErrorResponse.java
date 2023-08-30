@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 public class ApiErrorResponse {
   @Getter
   public String message;
-
-
         public ApiErrorResponse(String message, String s) {
             super();
             this.message = message;

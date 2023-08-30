@@ -1,8 +1,11 @@
 package com.synacy.leaveapplication.leave;
 
+import com.synacy.leaveapplication.user.UserDetails;
 import com.synacy.leaveapplication.user.UserRepository;
 import com.synacy.leaveapplication.user.Users;
+import com.synacy.leaveapplication.web.apierror.UserNotFoundException;
 import jakarta.persistence.Id;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,7 +68,7 @@ public class LeaveService {
         return leaveRepository.save(leave);
     }
 
-    private void updateEarnedLeave(Leave leave){
+    private void updateEarnedLeave(Leave leave) {
         Users users = userRepository.findAllById(leave.getUserId()).get();
         if (leave.getStatus() == LeaveStatus.PENDING) {
             users.setEarnedLeave(users.getEarnedLeave() + leave.getDuration());
@@ -80,11 +83,23 @@ public class LeaveService {
 
         return existingLeave.isPresent();
     }
+
     public boolean invalidEndDate(LocalDate startDate, LocalDate endDate) {
         return endDate.isBefore(startDate);
     }
+
     public boolean isFromCurrentMonth(LocalDate date) {
         LocalDate now = LocalDate.now();
         return now.getMonth() == date.getMonth() && now.getYear() == date.getYear();
     }
+    public int getEarnedLeaveBalance(UserDetails userDetails, Leave leave) {
+        int leaveBalance;
+        Users users = userRepository.findAllById(leave.getUserId()).get();
+
+        leaveBalance = users.getTotalLeaves() - leave.getDuration();
+
+        return leaveBalance;
+
 }
+
+    }

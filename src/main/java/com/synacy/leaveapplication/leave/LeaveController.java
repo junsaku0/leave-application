@@ -23,15 +23,6 @@ public class LeaveController {
     }
 
     @PostMapping("/api/v1/leave")
-//    public ResponseEntity<Leave> addLeave(@RequestBody LeaveDetails leaveDetails){
-//        try {
-//            Leave leave = leaveService.createLeave(leaveDetails);
-//            return new ResponseEntity<>(leave, HttpStatus.CREATED);
-//        } catch (LeaveAlreadyExistsException e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//
-//    }
     public ResponseEntity<?> addLeave(@RequestBody LeaveDetails leaveDetails) {
         LocalDate leaveDate = leaveDetails.getStartDate();
         LocalDate leaveEndDate = leaveDetails.getEndDate();
@@ -42,11 +33,9 @@ public class LeaveController {
         else if(leaveService.leaveExist(leaveDetails.getStartDate())) {
             return new ResponseEntity<>("Leave already exists on the provided date", HttpStatus.BAD_REQUEST);
         }
-
             Leave leave = leaveService.createLeave(leaveDetails);
             return new ResponseEntity<>(leave, HttpStatus.CREATED);
         }
-
 
     @GetMapping("api/v1/leave/{id}")
     public PageResponse<LeaveResponse> getMyLeave(

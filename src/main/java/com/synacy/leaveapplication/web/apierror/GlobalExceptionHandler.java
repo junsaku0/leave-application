@@ -34,4 +34,9 @@ public class GlobalExceptionHandler {
 //        return new ApiErrorResponse("Username already exists",e.getMessage());
 //    }
 
+  /*  @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(LackingParameterException.class)
+    public ApiErrorResponse InsufficientEarnedLeave(LackingParameterException e) {
+        return new ApiErrorResponse("INSUFFICIENT BALANCE LEAVE", e.getMessage());
+    }*/
 }
