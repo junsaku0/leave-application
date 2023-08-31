@@ -8,13 +8,15 @@ import java.time.LocalDate;
 @Getter
 public class UserDetails {
 
+
+    @Getter
     private String name;
 
     private UserRole role;
 
     private String head;
 
-    private LocalDate hireDate;
+   private LocalDate hireDate;
 
     private int totalLeave;
 

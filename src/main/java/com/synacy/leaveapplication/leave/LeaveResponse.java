@@ -24,7 +24,7 @@ public class LeaveResponse {
     LocalDate endDate;
 
     @Getter
-    Long duration;
+    Integer duration;
 
     @Getter
     String reason;
