@@ -68,5 +68,17 @@ public class UserController {
         List<Users> employeeList = userService.findAllEmployees();
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
+
+    @PutMapping("api/v1/user/{id}")
+    public ResponseEntity<?> updateUserLeave (@RequestBody UserLeaveDetails  userLeaveDetails,
+                                              @PathVariable Long id){
+        userService.updateUserLeave(id, userLeaveDetails);
+        return new ResponseEntity<>("User leave details updated successfully", HttpStatus.OK);
+
+    }
+
+
+
+
 }
 

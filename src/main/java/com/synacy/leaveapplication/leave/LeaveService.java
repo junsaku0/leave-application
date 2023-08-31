@@ -65,8 +65,6 @@ public class LeaveService {
         return leaveRepository.findAll(pageable);
     }
 
-
-
     public Leave updateLeave(Long leaveId, LeaveStatus status) {
         Leave leave = leaveRepository.findById(leaveId)
                 .orElseThrow(() -> new IllegalArgumentException("Leave not found with ID: " + leaveId));
@@ -85,6 +83,7 @@ public class LeaveService {
         }
         userRepository.save(users);
     }
+
 
     public boolean leaveExist(LocalDate startDate) {
         Optional<Leave> existingLeave = leaveRepository.findByStartDate(startDate);

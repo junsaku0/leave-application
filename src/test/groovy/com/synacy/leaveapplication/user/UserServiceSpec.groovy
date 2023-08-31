@@ -100,9 +100,30 @@ class UserServiceSpec extends Specification {
         1 * userRepository.findAll() >> allUsers
     }
 
+    def "test updateUserLeave"() {
+        given:
+        Users users = new Users(id: 1L, earnedLeave: 5, totalLeaves: 10)
+        UserLeaveDetails userLeaveDetails = new UserLeaveDetails(8, 15)
 
+        userRepository.findById(1L) >> Optional.of(users)
 
+        when:
+        userService.updateUserLeave(1L, userLeaveDetails)
 
+        then:
+        1 * userRepository.save(_) >> {Users user ->
+            assert user.earnedLeave == 8
+            assert user.totalLeaves == 15
+
+        }
 
     }
+
+
+
+
+
+
+
+}
 

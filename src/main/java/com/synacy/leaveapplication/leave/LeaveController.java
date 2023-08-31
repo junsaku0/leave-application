@@ -3,6 +3,7 @@ package com.synacy.leaveapplication.leave;
 import com.synacy.leaveapplication.user.Users;
 import com.synacy.leaveapplication.web.PageResponse;
 import com.synacy.leaveapplication.web.apierror.LeaveAlreadyExistsException;
+import com.synacy.leaveapplication.web.apierror.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,15 @@ public class LeaveController {
 
     private final LeaveService leaveService;
 
+
     @Autowired
     public LeaveController(LeaveService leaveService) {
         this.leaveService = leaveService;
+
     }
 
     @PostMapping("/api/v1/leave")
-    public ResponseEntity<?> addLeave(@RequestBody LeaveDetails leaveDetails) {
+    public ResponseEntity<?> addLeave(@RequestBody LeaveDetails leaveDetails) throws UserNotFoundException {
         LocalDate leaveDate = leaveDetails.getStartDate();
         LocalDate leaveEndDate = leaveDetails.getEndDate();
         if (leaveService.invalidEndDate(leaveDetails.getStartDate(),leaveDetails.getEndDate()))
@@ -35,7 +38,7 @@ public class LeaveController {
         }
         leaveService.insufficientLeave(leaveDetails);
             Leave leave = leaveService.createLeave(leaveDetails);
-            return new ResponseEntity<>(leave, HttpStatus.CREATED);
+        return new ResponseEntity<>(leave, HttpStatus.CREATED);
         }
 
     @GetMapping("api/v1/leave/{id}")
@@ -78,11 +81,6 @@ public class LeaveController {
         return new PageResponse<>(leaves.getNumberOfElements(),
                 page, leaveResponses);
     }
-
-
-
-
-
 
 
     @PutMapping("/api/v1/leave/{id}")

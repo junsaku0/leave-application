@@ -6,10 +6,7 @@ import com.synacy.leaveapplication.web.apierror.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 @Service
@@ -24,6 +21,7 @@ public class UserService {
         this.userRepository = userRepository;
         this.initializeUser();
     }
+
     public Users createUser(UserDetails userDetails) {
         missingParameterExists(userDetails);
         if (userNameExists(userDetails)) {
@@ -62,6 +60,7 @@ public class UserService {
     private void initializeUser() {
         userRepository.saveAll(this.usersList);
     }
+
     public boolean userExists(String name) {
         return userRepository.findByName(name).isPresent();
     }
@@ -81,4 +80,20 @@ public class UserService {
             }
         });
     }
+
+
+    public void updateUserLeave(Long userId, UserLeaveDetails userLeaveDetails) {
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+        user.setEarnedLeave(userLeaveDetails.getEarnedLeave());
+        user.setTotalLeaves(userLeaveDetails.getTotalLeaves());
+
+        userRepository.save(user);
+
+
+    }
+
 }
+
+
