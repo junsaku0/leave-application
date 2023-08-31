@@ -40,6 +40,7 @@ public class LeaveService {
             throw new ExceededLeaveBalanceException("Total balance leave not enough!");
         }
         users.setTotalLeaves(leaveBalance);
+        userRepository.save(users);
     }
 
     public Page<Leave> fetchLeaveByNameAndRole(Long id, int max, int page) {
