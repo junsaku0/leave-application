@@ -31,9 +31,6 @@ public class UserController {
     @GetMapping("api/v1/user/manager")
     public ResponseEntity<List<UserResponse>> fetchManagerUserList() {
         List<Users> managerList = userService.findAllManagers();
-        if (managerList.isEmpty()) {
-            throw new IllegalArgumentException("No manager found");
-        }
         List<UserResponse> managerResponseList =
                 managerList.stream().map(UserResponse::new)
                         .collect(Collectors.toList());
@@ -44,10 +41,9 @@ public class UserController {
     @GetMapping("/api/v1/user/employee")
     public ResponseEntity<List<UserResponse>> fetchEmployeeUserList() {
         List<Users> employeeList = userService.findAllEmployees();
-        if (employeeList.isEmpty()) {
-            throw new IllegalArgumentException("No employee found!");
-        }
-        List<UserResponse> employeeResponseList = employeeList.stream().map(UserResponse::new).collect(Collectors.toList());
+        List<UserResponse> employeeResponseList =
+                employeeList.stream().map(UserResponse::new)
+                        .collect(Collectors.toList());
         return new ResponseEntity<>(employeeResponseList, HttpStatus.OK);
     }
 
@@ -61,7 +57,7 @@ public class UserController {
     }
 
         @GetMapping("api/v1/user")
-        public ResponseEntity<List<UserResponse>> fetchUserList () {
+        public ResponseEntity<List<UserResponse>> fetchUserList() {
                 List<Users> userList = userService.findAllUsers();
             List<UserResponse> userResponseList =
                     userList.stream().map(UserResponse::new)
@@ -91,11 +87,10 @@ public class UserController {
     }
 
     @PutMapping("api/v1/user/{id}")
-    public ResponseEntity<?> updateUserLeave (@RequestBody UserLeaveDetails  userLeaveDetails,
-                                              @PathVariable Long id){
-        userService.updateUserLeave(id, userLeaveDetails);
-        return new ResponseEntity<>("User leave details updated successfully", HttpStatus.OK);
-
+    public ResponseEntity<Users> updateUserLeave(@PathVariable Long id,
+                                              @RequestBody UserLeaveDetails userLeaveDetails){
+        Users user = userService.updateUserLeave(id, userLeaveDetails);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }
 

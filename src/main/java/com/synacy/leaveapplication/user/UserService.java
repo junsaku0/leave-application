@@ -19,7 +19,7 @@ public class UserService {
     public UserService(List<Users> usersList, UserRepository userRepository) {
         this.usersList = usersList;
         this.userRepository = userRepository;
-        this.initializeUser();
+//        this.initializeUser();
     }
 
     public Users createUser(UserDetails userDetails) {
@@ -86,16 +86,13 @@ public class UserService {
     }
 
 
-    public void updateUserLeave(Long userId, UserLeaveDetails userLeaveDetails) {
-        Users user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+    public Users updateUserLeave(Long userId, UserLeaveDetails userLeaveDetails) {
+        Users user = userRepository.findAllById(userId).get();
 
         user.setEarnedLeave(userLeaveDetails.getEarnedLeave());
-        user.setTotalLeaves(userLeaveDetails.getTotalLeaves());
+        user.setTotalLeaves(userLeaveDetails.getTotalLeave());
 
-        userRepository.save(user);
-
-
+        return userRepository.save(user);
     }
 
 }
