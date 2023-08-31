@@ -12,35 +12,27 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private UserService userService;
+    private List<Users> userList;
 
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v1/user")
-    public ResponseEntity<Users> addUser(@RequestBody UserDetails userDetails) {
-              Users users = userService.createUser(userDetails);
-              return new ResponseEntity<>(users, HttpStatus.CREATED);
-    }
-
-    @GetMapping("api/v1/user/manager")
-    public ResponseEntity<List<UserResponse>> fetchManagerUserList() {
-        List<Users> managerList = userService.findAllManagers();
-        if (managerList.isEmpty()) {
-            throw new IllegalArgumentException("No manager found");
+    public ResponseEntity<?> addUser(@RequestBody UserDetails userDetails) {
+        if (userService.userExists(userDetails.getName())) {
+            return new ResponseEntity<>("Username already exists!", HttpStatus.BAD_REQUEST);
         }
-        List<UserResponse> managerResponseList =
-                managerList.stream().map(UserResponse::new)
-                        .collect(Collectors.toList());
-        return new ResponseEntity<>(managerResponseList, HttpStatus.OK);
+        Users users = userService.createUser(userDetails);
+            return new ResponseEntity<> (users, HttpStatus.CREATED);
     }
 
-    @GetMapping("/api/v1/user/employee")
     public ResponseEntity<List<UserResponse>> fetchEmployeeUserList() {
         List<Users> employeeList = userService.findAllEmployees();
         if (employeeList.isEmpty()) {
-            throw new IllegalArgumentException("No employee found");
+            throw new IllegalArgumentException("No employee found!");
         }
         List<UserResponse> employeeResponseList = employeeList.stream().map(UserResponse::new).collect(Collectors.toList());
         return new ResponseEntity<>(employeeResponseList, HttpStatus.OK);
@@ -55,13 +47,14 @@ public class UserController {
         return new ResponseEntity<>(adminResponseList, HttpStatus.OK);
     }
 
-    @GetMapping("api/v1/user")
-    public ResponseEntity<List<UserResponse>> fetchUserList () {
-            List<Users> userList = userService.findAllUsers();
-        List<UserResponse> userResponseList =
-                userList.stream().map(UserResponse::new)
-                        .collect(Collectors.toList());
-        return new ResponseEntity<>(userResponseList, HttpStatus.OK);
+        @GetMapping("api/v1/user")
+        public ResponseEntity<List<UserResponse>> fetchUserList () {
+                List<Users> userList = userService.findAllUsers();
+            List<UserResponse> userResponseList =
+                    userList.stream().map(UserResponse::new)
+                            .collect(Collectors.toList());
+            return new ResponseEntity<>(userResponseList, HttpStatus.OK);
+
     }
 
     @GetMapping("api/v1/manager")
@@ -83,4 +76,13 @@ public class UserController {
         Users users = userService.findUserById(id);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+    @PutMapping("api/v1/user/{id}")
+    public ResponseEntity<?> updateUserLeave (@RequestBody UserLeaveDetails  userLeaveDetails,
+                                              @PathVariable Long id){
+        userService.updateUserLeave(id, userLeaveDetails);
+        return new ResponseEntity<>("User leave details updated successfully", HttpStatus.OK);
+
+    }
 }
+
