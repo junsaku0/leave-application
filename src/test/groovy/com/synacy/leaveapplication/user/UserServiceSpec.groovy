@@ -7,8 +7,8 @@ import java.time.LocalDate
 
 class UserServiceSpec extends Specification {
 
-    private UserRepository userRepository;
-    public UserService userService;
+    private UserRepository userRepository
+    public UserService userService
 
     void setup() {
         this.userRepository = Mock(UserRepository)
@@ -38,7 +38,7 @@ class UserServiceSpec extends Specification {
         userService.createUser(userDetails)
 
         then:
-        1 * userRepository.save(_) >> {Users users ->
+        1 * userRepository.save(_) >> { Users users ->
             assert name == users.getName()
             assert role == users.getRole()
             assert userHead.getId() == users.getHeadId()
@@ -102,7 +102,7 @@ class UserServiceSpec extends Specification {
 
     def "test updateUserLeave"() {
         given:
-        Users users = new Users(id: 1L, earnedLeave: 5, totalLeaves: 10)
+        Users users = Mock(Users)
         UserLeaveDetails userLeaveDetails = new UserLeaveDetails(8, 15)
 
         userRepository.findById(1L) >> Optional.of(users)
@@ -111,19 +111,18 @@ class UserServiceSpec extends Specification {
         userService.updateUserLeave(1L, userLeaveDetails)
 
         then:
-        1 * userRepository.save(_) >> {Users user ->
-            assert user.earnedLeave == 8
-            assert user.totalLeaves == 15
-
+        1 * userRepository.save(_) >> { Users savedUser ->
+            savedUser.earnedLeave == 8
+            savedUser.totalLeaves == 15
         }
 
     }
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
 
