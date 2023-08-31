@@ -83,6 +83,22 @@ class LeaveControllerSpec extends Specification {
         then:
         leaves.size() == actualResponse.getContent().size()
     }
+    def "addLeave should throw an error if the leave already exist on the same day "(){
+        given:
+        Leave leave = Mock(Leave)
+        LeaveDetails leaveDetails = Mock(LeaveDetails)
+
+        leaveService.createLeave(leaveDetails) >> leave
+
+        when:
+        ResponseEntity<Leave> response = leaveController.addLeave(leaveDetails)
+
+        then:
+        thrown(leaveExist)
+
+
+
+    }
 
 
 }

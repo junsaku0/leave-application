@@ -68,5 +68,12 @@ public class UserController {
         List<Users> employeeList = userService.findAllEmployees();
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
+    @GetMapping("api/v1/user/{id}")
+    public ResponseEntity<Users> fetchUserById(
+            @PathVariable Long id
+    ) {
+        Users users = userService.findUserById(id);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 }
 
