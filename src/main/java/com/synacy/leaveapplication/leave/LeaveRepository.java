@@ -19,7 +19,7 @@ public interface LeaveRepository extends JpaRepository<Leave,Long> {
 
     Page<Leave> findAllByNameAndRole(String name, UserRole role, Pageable pageable);
 
-    Optional<Leave> findByStartDate (LocalDate startDate);
+    Optional<Leave> findByUserIdAndStartDateAndStatusNotAndStatusNot (Long id, LocalDate startDate, LeaveStatus leaveStatus1, LeaveStatus leaveStatus2);
 
     List<Leave> findByEndDate (LocalDate endDate);
 

@@ -26,14 +26,12 @@ public class LeaveController {
     }
 
     @PostMapping("/api/v1/leave")
-    public ResponseEntity<?> addLeave(@RequestBody LeaveDetails leaveDetails) throws UserNotFoundException {
-        LocalDate leaveDate = leaveDetails.getStartDate();
-        LocalDate leaveEndDate = leaveDetails.getEndDate();
+    public ResponseEntity<?> addLeave(@RequestBody LeaveDetails leaveDetails) {
         if (leaveService.invalidEndDate(leaveDetails.getStartDate(),leaveDetails.getEndDate()))
         {
             return new ResponseEntity<>("Invalid End date", HttpStatus.BAD_REQUEST);
         }
-        else if(leaveService.leaveExist(leaveDetails.getStartDate())) {
+        else if(leaveService.leaveExist(leaveDetails.getStartDate(), leaveDetails.getUserId())) {
             return new ResponseEntity<>("Leave already exists on the provided date!", HttpStatus.BAD_REQUEST);
         }
         leaveService.insufficientLeave(leaveDetails);

@@ -19,7 +19,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v1/user")
     public ResponseEntity<?> addUser(@RequestBody UserDetails userDetails) {
         if (userService.userExists(userDetails.getName())) {
@@ -29,6 +28,20 @@ public class UserController {
             return new ResponseEntity<> (users, HttpStatus.CREATED);
     }
 
+    @GetMapping("api/v1/user/manager")
+    public ResponseEntity<List<UserResponse>> fetchManagerUserList() {
+        List<Users> managerList = userService.findAllManagers();
+        if (managerList.isEmpty()) {
+            throw new IllegalArgumentException("No manager found");
+        }
+        List<UserResponse> managerResponseList =
+                managerList.stream().map(UserResponse::new)
+                        .collect(Collectors.toList());
+        return new ResponseEntity<>(managerResponseList, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/api/v1/user/employee")
     public ResponseEntity<List<UserResponse>> fetchEmployeeUserList() {
         List<Users> employeeList = userService.findAllEmployees();
         if (employeeList.isEmpty()) {

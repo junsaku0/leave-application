@@ -29,6 +29,7 @@ public class LeaveService {
         Leave leave = new Leave(leaveDetails.getUserId(), leaveDetails.getName(), leaveDetails.getRole(),
                 leaveDetails.getStartDate(), leaveDetails.getEndDate(),
                 leaveDetails.getReason());
+        updateEarnedLeave(leave);
         return this.leaveRepository.save(leave);
     }
     public void insufficientLeave(LeaveDetails leaveDetails){
@@ -85,8 +86,8 @@ public class LeaveService {
     }
 
 
-    public boolean leaveExist(LocalDate startDate) {
-        Optional<Leave> existingLeave = leaveRepository.findByStartDate(startDate);
+    public boolean leaveExist(LocalDate startDate, Long id) {
+        Optional<Leave> existingLeave = leaveRepository.findByUserIdAndStartDateAndStatusNotAndStatusNot(id, startDate, LeaveStatus.CANCELLED, LeaveStatus.REJECTED);
 
         return existingLeave.isPresent();
     }
