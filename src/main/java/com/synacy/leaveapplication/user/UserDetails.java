@@ -4,27 +4,28 @@ import com.synacy.leaveapplication.UserRole;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 public class UserDetails {
 
+
+    @Getter
     private String name;
 
     private UserRole role;
 
-    private Long headId;
+    private String head;
 
-    private LocalDate hireDate;
+   private LocalDate hireDate;
 
     private int totalLeave;
 
 
-    public UserDetails(String name, UserRole role, Long headId,
+    public UserDetails(String name, UserRole role, String head,
                        LocalDate hireDate, int totalLeave) {
         this.name = name;
         this.role = role;
-        this.headId = headId;
+        this.head = head;
         this.hireDate = hireDate;
         this.totalLeave = totalLeave;
     }
