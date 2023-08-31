@@ -75,7 +75,7 @@ public class UserService {
             put("Role", userDetails::getRole);
             put("Head", userDetails::getHead);
             put("Hire date", userDetails::getHireDate);
-            put("TotalLeave", userDetails::getTotalLeave);
+            put("Total Leave", userDetails::getTotalLeave);
         }};
 
         fieldCheckers.forEach((fieldName, supplier) -> {
@@ -99,5 +99,3 @@ public class UserService {
     }
 
 }
-
-

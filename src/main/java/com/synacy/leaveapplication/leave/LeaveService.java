@@ -38,9 +38,10 @@ public class LeaveService {
                 leaveDetails.getStartDate(), leaveDetails.getEndDate(), leaveDetails.getReason());
         int leaveBalance = getEarnedLeaveBalance(users, leave);
         if (leaveBalance < 0 ) {
-            throw new ExceededLeaveBalanceException("Total balance leave not enough!");
+            throw new ExceededLeaveBalanceException("Total balance leave is not enough!");
         }
         users.setTotalLeaves(leaveBalance);
+        userRepository.save(users);
     }
 
     public Page<Leave> fetchLeaveByNameAndRole(Long id, int max, int page) {
