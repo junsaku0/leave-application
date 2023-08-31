@@ -1,8 +1,6 @@
 package com.synacy.leaveapplication.user
 
 import com.synacy.leaveapplication.UserRole
-import com.synacy.leaveapplication.leave.LeaveRepository
-import com.synacy.leaveapplication.leave.LeaveService
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -49,4 +47,62 @@ class UserServiceSpec extends Specification {
         }
 
     }
-}
+
+    def "should return a list of managers"() {
+        given:
+        List<Users> managerList = [Mock(Users), Mock(Users)]
+        userRepository.findAllByRole(UserRole.MANAGER) >> managerList
+
+        when:
+        def result = userService.findAllManagers()
+
+        then:
+        managerList == result
+        1 * userRepository.findAllByRole(UserRole.MANAGER) >> managerList
+    }
+
+    def "should return a list of employees"() {
+        given:
+        List<Users> employeeList = [Mock(Users), Mock(Users)]
+        userRepository.findAllByRole(UserRole.EMPLOYEE) >> employeeList
+
+        when:
+        def result = userService.findAllEmployees()
+
+        then:
+        employeeList == result
+        1 * userRepository.findAllByRole(UserRole.EMPLOYEE) >> employeeList
+    }
+
+    def "should return a list of admins"() {
+        given:
+        List<Users> adminList = [Mock(Users), Mock(Users)]
+        userRepository.findAllByRole(UserRole.ADMIN) >> adminList
+
+        when:
+        def result = userService.findAllAdmins()
+
+        then:
+        adminList == result
+        1 * userRepository.findAllByRole(UserRole.ADMIN) >> adminList
+    }
+
+    def "should return all users"() {
+        given:
+        List<Users> allUsers = [Mock(Users), Mock(Users)]
+        userRepository.findAll() >> allUsers
+
+        when:
+        def result = userService.findAllUsers()
+
+        then:
+        allUsers == result
+        1 * userRepository.findAll() >> allUsers
+    }
+
+
+
+
+
+    }
+
