@@ -84,12 +84,35 @@ class UserControllerSpec extends Specification {
         response.body.size() == userList.size()
     }
 
+    def "addUser should return bad request when username already exists"() {
+        given:
+        UserService userService = Mock()
+        UserController userController = new UserController(userService)
+        UserDetails userDetails = Mock(UserDetails)
+        userService.userExists(userDetails.name) >> true
 
+        when:
+        ResponseEntity<?> response = userController.addUser(userDetails)
 
+        then:
+        response.statusCode == HttpStatus.BAD_REQUEST
+        response.body == "Username already exists!"
+    }
 
+    def "addUser should create user when username doesn't exist"() {
+        given:
+        UserDetails userDetails = Mock(UserDetails)
+        userService.userExists(userDetails.name) >> false
+        def expectedUser = new Users(name: userDetails.name)
+        userService.createUser(userDetails) >> expectedUser
 
+        when:
+        ResponseEntity<?> response = userController.addUser(userDetails)
 
-
+        then:
+        response.statusCode == HttpStatus.CREATED
+        response.body == expectedUser
+    }
 
 
 }

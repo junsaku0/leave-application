@@ -131,7 +131,7 @@ class LeaveServiceSpec extends Specification {
         LocalDate startDate = LocalDate.of(2022, 12, 31)
         LocalDate endDate = LocalDate.of(2022, 12, 30)
 
-        expect: "invalidEndDate to return true"
+        expect:
         validator.invalidEndDate(startDate, endDate)
 
     }
@@ -141,22 +141,24 @@ class LeaveServiceSpec extends Specification {
         LocalDate startDate = LocalDate.of(2023, 9, 1)
         LocalDate endDate = LocalDate.of(2023, 9, 2)
 
-        expect: "invalidEndDate to return false"
+        expect:
         !validator.invalidEndDate(startDate, endDate)
     }
 
-
-
-    def "insufficientLeave should throw an error when leave balance is negative"() {
+    def "insufficientLeave should throw ExceededLeaveBalanceException when user not enough total leave"() {
         given:
-        LeaveDetails leaveDetails = Mock(LeaveDetails)
         Users users = Mock(Users)
+        LeaveDetails leaveDetails = Mock(LeaveDetails)
 
-        leaveDetails.getUserId() >> "userId"
+        userRepository.findAllById(1L) >> Optional.of(users)
+        leaveDetails.getUserId() >> 1L
+        leaveDetails.getName() >> "Alice"
+        leaveDetails.getRole() >> UserRole.EMPLOYEE
+        leaveDetails.getStartDate() >> LocalDate.now()
+        leaveDetails.getEndDate() >> LocalDate.now().plusDays(5)
+        leaveDetails.getReason() >> "Vacation"
 
-//        userRepository.findAllById("userId) >> Optional.of(users)
-
-        leaveService.getEarnedLeaveBalance(users, _) >> -1
+        users.getTotalLeaves() >> 0
 
         when:
         leaveService.insufficientLeave(leaveDetails)
@@ -164,6 +166,7 @@ class LeaveServiceSpec extends Specification {
         then:
         thrown(ExceededLeaveBalanceException)
     }
+
 
 
 }
