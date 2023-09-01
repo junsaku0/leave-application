@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ExceededLeaveBalanceException.class)
-    public ResponseEntity<String> handleExceededLeaveBalanceException(ExceededLeaveBalanceException ex){
-        return new ResponseEntity<> (ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> handleExceededLeaveBalanceException(ExceededLeaveBalanceException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -30,15 +30,4 @@ public class GlobalExceptionHandler {
     public ApiErrorResponse handleLackingParameterException(LackingParameterException e) {
         return new ApiErrorResponse("LACKING_PARAMETER", e.getMessage());
     }
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(LackingParameterException.class)
-//    public ApiErrorResponse userAlreadyExistsException(UserAlreadyExistsException e) {
-//        return new ApiErrorResponse("Username already exists",e.getMessage());
-//    }
-
-  /*  @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(LackingParameterException.class)
-    public ApiErrorResponse InsufficientEarnedLeave(LackingParameterException e) {
-        return new ApiErrorResponse("INSUFFICIENT BALANCE LEAVE", e.getMessage());
-    }*/
 }

@@ -19,7 +19,7 @@ public class UserService {
     public UserService(List<Users> usersList, UserRepository userRepository) {
         this.usersList = usersList;
         this.userRepository = userRepository;
-//        this.initializeUser();
+        this.initializeUser();
     }
 
     public Users createUser(UserDetails userDetails) {

@@ -77,16 +77,14 @@ public class LeaveService {
     }
 
     private void updateEarnedLeave(Leave leave) {
-        Users users = userRepository.findAllById(leave.getUserId()).get();
+        Users users = userRepository.findById(leave.getUserId()).get();
         if (leave.getStatus() == LeaveStatus.PENDING) {
-            users.setEarnedLeave(users.getEarnedLeave() + leave.getDuration());
+            users.setEarnedLeave(users.getEarnedLeave()-leave.getDuration());
         } else if (leave.getStatus() == LeaveStatus.REJECTED || leave.getStatus() == LeaveStatus.CANCELLED) {
-            users.setEarnedLeave(users.getEarnedLeave() - leave.getDuration());
+            users.setEarnedLeave(users.getEarnedLeave() + leave.getDuration());
         }
         userRepository.save(users);
     }
-
-
     public boolean leaveExist(LocalDate startDate, Long id) {
         Optional<Leave> existingLeave = leaveRepository.findByUserIdAndStartDateAndStatusNotAndStatusNot(id, startDate, LeaveStatus.CANCELLED, LeaveStatus.REJECTED);
 

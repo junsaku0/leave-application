@@ -35,4 +35,5 @@ public class LeaveDetails {
         this.reason = reason;
     }
 
+
 }
