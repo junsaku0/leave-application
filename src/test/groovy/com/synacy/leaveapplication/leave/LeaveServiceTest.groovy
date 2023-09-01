@@ -1,8 +1,11 @@
+
 package com.synacy.leaveapplication.leave
 
 import com.synacy.leaveapplication.UserRole
+import com.synacy.leaveapplication.leave.DateValidator.DateValidator
 import com.synacy.leaveapplication.user.UserRepository
 import com.synacy.leaveapplication.user.Users
+import com.synacy.leaveapplication.web.apierror.ExceededLeaveBalanceException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -12,9 +15,11 @@ import java.time.LocalDate
 
 class LeaveServiceSpec extends Specification {
 
+
     private LeaveRepository leaveRepository
     private UserRepository userRepository
     public LeaveService leaveService
+    DateValidator validator = new DateValidator()
 
     void setup() {
         leaveRepository = Mock(LeaveRepository)
@@ -92,15 +97,76 @@ class LeaveServiceSpec extends Specification {
         then:
         leaves == actualLeaves.getContent()
     }
-    def "invalidEndDate should return true when endDate is before existing leave"() {
+
+    def "leaveExist should return false if leave does not exist"() {
         given:
-        LocalDate endDate = LocalDate.of(2022, 12, 31)
-        Leave existingLeave = new Leave(endDate: LocalDate.of(2023, 1, 1))
-        List<Leave> existingLeaveList = [existingLeave]
-        leaveRepository.findByEndDate(endDate) >> existingLeaveList
+        Long userId = 1L
+        LocalDate startDate = LocalDate.of(2023, 9, 1)
+
         when:
-        boolean result = leaveService.invalidEndDate(endDate)
+        boolean result = leaveService.leaveExist(startDate, userId)
+
         then:
-        result
+        1 * leaveRepository.findByUserIdAndStartDateAndStatusNotAndStatusNot(userId, startDate, LeaveStatus.CANCELLED, LeaveStatus.REJECTED) >> Optional.empty()
+
     }
+
+    def "leaveExist should return true if leave exists and is neither cancelled or rejected"() {
+        given:
+        Long userId = 1L
+        LocalDate startDate = LocalDate.of(2023, 9, 1)
+        Leave existingLeave = new Leave()
+
+        when:
+        boolean result = leaveService.leaveExist(startDate, userId)
+
+        then:
+        1 * leaveRepository.findByUserIdAndStartDateAndStatusNotAndStatusNot(userId, startDate, LeaveStatus.CANCELLED, LeaveStatus.REJECTED) >> Optional.of(existingLeave)
+
+    }
+
+    def "invalidEndDate should return true when endDate that is earlier than start date"() {
+
+        given:
+        LocalDate startDate = LocalDate.of(2022, 12, 31)
+        LocalDate endDate = LocalDate.of(2022, 12, 30)
+
+        expect:
+        validator.invalidEndDate(startDate, endDate)
+
+    }
+
+    def "invalidEndDate should return false when endDate is after or equals startDate"() {
+        given:
+        LocalDate startDate = LocalDate.of(2023, 9, 1)
+        LocalDate endDate = LocalDate.of(2023, 9, 2)
+
+        expect:
+        !validator.invalidEndDate(startDate, endDate)
+    }
+
+    def "insufficientLeave should throw ExceededLeaveBalanceException when user not enough total leave"() {
+        given:
+        Users users = Mock(Users)
+        LeaveDetails leaveDetails = Mock(LeaveDetails)
+
+        userRepository.findAllById(1L) >> Optional.of(users)
+        leaveDetails.getUserId() >> 1L
+        leaveDetails.getName() >> "Alice"
+        leaveDetails.getRole() >> UserRole.EMPLOYEE
+        leaveDetails.getStartDate() >> LocalDate.now()
+        leaveDetails.getEndDate() >> LocalDate.now().plusDays(5)
+        leaveDetails.getReason() >> "Vacation"
+
+        users.getTotalLeaves() >> 0
+
+        when:
+        leaveService.insufficientLeave(leaveDetails)
+
+        then:
+        thrown(ExceededLeaveBalanceException)
+    }
+
+
+
 }

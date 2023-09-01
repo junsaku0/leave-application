@@ -16,17 +16,14 @@ import java.util.Optional;
 public interface LeaveRepository extends JpaRepository<Leave,Long> {
 
 
-
     Page<Leave> findAllByNameAndRole(String name, UserRole role, Pageable pageable);
 
-    Optional<Leave> findByUserIdAndStartDateAndStatusNotAndStatusNot (Long id, LocalDate startDate, LeaveStatus leaveStatus1, LeaveStatus leaveStatus2);
+    Optional<Leave> findByUserIdAndStartDateAndStatusNotAndStatusNot(Long id, LocalDate startDate, LeaveStatus leaveStatus1, LeaveStatus leaveStatus2);
 
     List<Leave> findByEndDate (LocalDate endDate);
 
     @Query("SELECT leave FROM Leave as leave WHERE leave.userId IN " +
             "(SELECT user.id FROM Users as user WHERE user.headId = :headId)")
     Page<Leave> findLeaveByHeadId(@Param("headId") Long headId, Pageable pageable);
-
-
 
 }

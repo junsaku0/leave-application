@@ -10,6 +10,7 @@ class UserServiceSpec extends Specification {
     private UserRepository userRepository
     public UserService userService
 
+
     void setup() {
         this.userRepository = Mock(UserRepository)
         this.userService = new UserService([], this.userRepository)
@@ -116,6 +117,18 @@ class UserServiceSpec extends Specification {
             savedUser.totalLeaves == 15
         }
 
+    }
+
+    def "userExists test with existing user"() {
+        given:
+        Users users = Mock(Users)
+        userRepository.findByName("Alice") >> Optional.of(users)
+
+        when:
+        boolean exists = userService.userExists("Alice")
+
+        then:
+        exists
     }
 }
 

@@ -1,11 +1,14 @@
 package com.synacy.leaveapplication.leave
 
+
+import com.synacy.leaveapplication.user.Users
 import com.synacy.leaveapplication.web.PageResponse
 import org.springframework.data.domain.PageImpl
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 
+import java.time.LocalDate
 
 class LeaveControllerSpec extends Specification {
 
@@ -83,10 +86,14 @@ class LeaveControllerSpec extends Specification {
         then:
         leaves.size() == actualResponse.getContent().size()
     }
-    def "addLeave should throw an error if the leave already exist on the same day "(){
+
+    def "addLeave should throw an error if the endDate is before the startDate"() {
         given:
         Leave leave = Mock(Leave)
         LeaveDetails leaveDetails = Mock(LeaveDetails)
+        LocalDate date = LocalDate.now()
+        leaveDetails.getStartDate() >> date
+        leaveService.invalidEndDate(_, _) >> true
 
         leaveService.createLeave(leaveDetails) >> leave
 
@@ -94,11 +101,41 @@ class LeaveControllerSpec extends Specification {
         ResponseEntity<Leave> response = leaveController.addLeave(leaveDetails)
 
         then:
-        thrown(leaveExist)
+        HttpStatus.BAD_REQUEST == response.getStatusCode()
+    }
 
+    def "addLeave should throw an error if the leave already exist on the same day"() {
+        given:
+        Leave leave = Mock(Leave)
+        LeaveDetails leaveDetails = Mock(LeaveDetails)
+        LocalDate date = LocalDate.now()
+        leaveDetails.getStartDate() >> date
+        leaveService.leaveExist(_, _) >> true
 
+        leaveService.createLeave(leaveDetails) >> leave
+
+        when:
+        ResponseEntity<Leave> response = leaveController.addLeave(leaveDetails)
+
+        then:
+        HttpStatus.BAD_REQUEST == response.getStatusCode()
 
     }
 
+    def "addLeave should throw an error if there have no available leave balance"() {
+        given:
+        LeaveDetails leaveDetails = Mock(LeaveDetails)
+        Users users = Mock(Users)
+        LocalDate date = LocalDate.now()
+        leaveDetails.getUserId() >> "userId"
+        leaveService.insufficientLeave(_) >> true
 
+        when:
+        leaveController.addLeave(leaveDetails)
+
+        then:
+        HttpStatus.BAD_REQUEST == response.getStatusCode()
+    }
 }
+
+

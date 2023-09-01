@@ -1,8 +1,6 @@
 package com.synacy.leaveapplication.leave;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
