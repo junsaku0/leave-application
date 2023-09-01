@@ -1,21 +1,14 @@
 package com.synacy.leaveapplication.leave
 
-import com.synacy.leaveapplication.leave.Leave
-import com.synacy.leaveapplication.leave.LeaveController
-import com.synacy.leaveapplication.leave.LeaveDetails
-import com.synacy.leaveapplication.leave.LeaveResponse
-import com.synacy.leaveapplication.leave.LeaveService;
+
 import com.synacy.leaveapplication.user.Users
 import com.synacy.leaveapplication.web.PageResponse
-import com.synacy.leaveapplication.web.apierror.ExceededLeaveBalanceException
 import org.springframework.data.domain.PageImpl
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
-import java.util.Optional
 
 import java.time.LocalDate
-
 
 class LeaveControllerSpec extends Specification {
 
