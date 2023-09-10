@@ -87,6 +87,4 @@ public class LeaveController {
         return new ResponseEntity<>(updatedLeave, HttpStatus.OK);
     }
 
-
-
 }

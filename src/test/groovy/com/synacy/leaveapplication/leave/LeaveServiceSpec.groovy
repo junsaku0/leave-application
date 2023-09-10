@@ -103,4 +103,17 @@ class LeaveServiceSpec extends Specification {
         then:
         result
     }
+
+    def "should return false if leave does not exist"() {
+        given:
+        Long userId = 1L
+        LocalDate startDate = LocalDate.of(2023, 9, 1)
+
+        when:
+        boolean result = leaveService.leaveExist(startDate, userId)
+
+        then:
+        1 * leaveRepository.findByUserIdAndStartDateAndStatusNotAndStatusNot(userId, startDate, LeaveStatus.CANCELLED, LeaveStatus.REJECTED) >> Optional.empty()
+
+    }
 }

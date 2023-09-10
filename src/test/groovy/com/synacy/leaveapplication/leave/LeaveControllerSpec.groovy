@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 
+import java.time.LocalDate
+
 
 class LeaveControllerSpec extends Specification {
 
@@ -87,6 +89,10 @@ class LeaveControllerSpec extends Specification {
         given:
         Leave leave = Mock(Leave)
         LeaveDetails leaveDetails = Mock(LeaveDetails)
+        LocalDate date = LocalDate.now()
+        leaveDetails.getStartDate() >> date
+        leaveService.invalidEndDate(_,_) >> false
+        leaveService.leaveExist(date) >> true
 
         leaveService.createLeave(leaveDetails) >> leave
 
@@ -94,10 +100,23 @@ class LeaveControllerSpec extends Specification {
         ResponseEntity<Leave> response = leaveController.addLeave(leaveDetails)
 
         then:
-        thrown(leaveExist)
+        HttpStatus.BAD_REQUEST == response.getStatusCode()
+    }
+    def "addLeave should throw an error if the endDate is before the startrDate"() {
+        given:
+        Leave leave = Mock(Leave)
+        LeaveDetails leaveDetails = Mock(LeaveDetails)
+        LocalDate date = LocalDate.now()
+        leaveDetails.getStartDate() >> date
+        leaveService.invalidEndDate(_,_) >> true
 
+        leaveService.createLeave(leaveDetails) >> leave
 
+        when:
+        ResponseEntity<Leave> response = leaveController.addLeave(leaveDetails)
 
+        then:
+        HttpStatus.BAD_REQUEST == response.getStatusCode()
     }
 
 
